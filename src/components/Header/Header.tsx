@@ -3,7 +3,7 @@ import React from 'react'
 export const Header = () => {
 	return (
 		<div>
-			<div className='flex justify-between items-center pt-[18px] px-3'>
+			<div className='flex justify-between items-center pt-[2.625rem] px-3 md:px-11 flex-wrap gap-3'>
 				<button
 					type='button'
 					className='bg-buttonLightGray px-[18px] pt-[11px] pb-[10px] shadow-button'

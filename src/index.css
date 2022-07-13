@@ -6,6 +6,10 @@ body {
 	background-color: #100e1d;
 }
 
+body.scrollable {
+	overflow: hidden;
+}
+
 /* CUSTOM SCROLLBAR */
 ::-webkit-scrollbar {
 	width: 5px;
