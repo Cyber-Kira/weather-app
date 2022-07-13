@@ -15,6 +15,7 @@ module.exports = {
 			},
 		},
 		colors: {
+			transparent: 'transparent',
 			lightestGray: '#E7E7EB',
 			lightGray: '#A09FB1',
 			gray: '#88869D',
@@ -24,6 +25,8 @@ module.exports = {
 			backgroundDark: '#100E1D',
 			darkBlue: '#110E3C',
 			accentBlue: '#3C47E9',
+			accentYellow: '#FFEC65',
+			buttonText: '#585676',
 		},
 	},
 	plugins: [],
