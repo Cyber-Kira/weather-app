@@ -15,6 +15,7 @@ export const UnitChanger = () => {
 							name='units'
 							id='celsius'
 							checked
+							onChange={e => console.log(e)}
 						/>
 						<div className='bg-buttonText peer-checked:bg-lightestGray absolute inset-0 rounded-full transition-colors' />
 						<span className='font-raleway font-bold text-lg leading-[21px] text-lightestGray peer-checked:text-darkBlue isolate'>

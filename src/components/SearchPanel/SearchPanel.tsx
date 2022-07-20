@@ -3,7 +3,7 @@ import { SearchItem } from './components/SearchItem'
 
 export const SearchPanel = () => {
 	const [value, setValue] = useState()
-	const [isSidePanelOpen, setIsSidePanelOpen] = useState(true)
+	const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
 
 	const handleClick = (
 		event: React.MouseEvent<HTMLButtonElement, MouseEvent>

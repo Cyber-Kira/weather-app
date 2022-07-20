@@ -7,15 +7,24 @@ interface Props {
 	units: string
 	value: number
 	widget?: string
+	deg?: number
+	percentage?: number
 }
 
-export const CardHighlight = ({ title, units, value, widget }: Props) => {
+export const CardHighlight = ({
+	title,
+	units,
+	value,
+	widget,
+	deg,
+	percentage,
+}: Props) => {
 	let weatherWidget
 
 	if (widget === 'wind') {
-		weatherWidget = <WindWidget />
+		weatherWidget = <WindWidget deg={deg} />
 	} else if (widget === 'humidity') {
-		weatherWidget = <HumidityWidget />
+		weatherWidget = <HumidityWidget percentage={percentage} />
 	}
 
 	if (units === 'km') {
