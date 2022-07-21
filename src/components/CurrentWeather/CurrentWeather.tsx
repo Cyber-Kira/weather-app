@@ -18,7 +18,7 @@ export const CurrentWeather = () => {
 
 	useEffect(() => {
 		dispatch(setDate())
-		dispatch(getWeather())
+		dispatch(getWeather({}))
 	}, [])
 
 	return (

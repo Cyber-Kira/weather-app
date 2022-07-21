@@ -39,15 +39,29 @@ const initialState: InitialStateInterface = {
 	},
 }
 
+interface Props {
+	locationLatitude?: number
+	locationLongitude?: number
+}
+
 export const getWeather = createAsyncThunk(
 	'weather/getFullWeatherReport',
-	async () => {
-		const crd = await getLocation().then(value => {
-			return value
-		})
-		const { latitude, longitude } = crd.coords
+	async ({ locationLatitude, locationLongitude }: Props) => {
+		let latitude = locationLatitude
+		let longitude = locationLongitude
 
-		const response = await fetchCurrentLocationWeather({ latitude, longitude })
+		if (!locationLatitude && !locationLongitude) {
+			const crd = await getLocation().then(value => {
+				return value
+			})
+			latitude = crd.coords.latitude
+			longitude = crd.coords.longitude
+		}
+
+		const response = await fetchCurrentLocationWeather({
+			latitude,
+			longitude,
+		})
 		return response
 	}
 )

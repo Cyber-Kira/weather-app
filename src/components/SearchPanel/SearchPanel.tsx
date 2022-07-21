@@ -1,29 +1,46 @@
 import React, { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import {
+	fetchLocation,
+	setMenu,
+} from '../../features/application/applicationSlice'
 import { SearchItem } from './components/SearchItem'
 
 export const SearchPanel = () => {
-	const [value, setValue] = useState()
-	const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
+	const [value, setValue] = useState<string>('')
+	const dispatch = useAppDispatch()
+	const { isMenuOpen, locations, isLoading } = useAppSelector(
+		store => store.application
+	)
+
+	const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(e.target.value)
+	}
 
 	const handleClick = (
 		event: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
 		event.preventDefault()
+
+		dispatch(fetchLocation(value))
+	}
+
+	const handleCloseClick = () => {
+		dispatch(setMenu(false))
+		document.body.classList.toggle('scrollable')
+		setValue('')
 	}
 
 	return (
 		<div
-			className={`absolute flex flex-col w-full bg-backgroundLight min-h-screen px-3 py-4 z-20 ${
-				isSidePanelOpen ? '' : '-translate-x-full'
+			className={`fixed md:absolute top-0 flex flex-col w-full bg-backgroundLight min-h-screen px-3 py-4 z-20 ${
+				isMenuOpen ? '' : '-translate-x-full'
 			} transition-transform duration-300`}
 		>
 			<button
 				className='grid items-center ml-auto w-10 h-10'
 				type='button'
-				onClick={() => {
-					setIsSidePanelOpen(false)
-					document.body.classList.toggle('scrollable')
-				}}
+				onClick={handleCloseClick}
 			>
 				<span className='material-icons text-lightestGray'>close</span>
 			</button>
@@ -37,7 +54,7 @@ export const SearchPanel = () => {
 						type='text'
 						value={value}
 						placeholder='search location'
-						onChange={() => setValue}
+						onChange={e => handleInput(e)}
 					/>
 				</div>
 				<button
@@ -48,10 +65,17 @@ export const SearchPanel = () => {
 					Search
 				</button>
 			</form>
-			<div className='grid gap-4 mt-10'>
-				<SearchItem />
-				<SearchItem />
-				<SearchItem />
+			<div className='grid gap-4 mt-10 h-[75vh] md:h-full overflow-y-auto'>
+				{!isLoading &&
+					locations.data.map(location => {
+						return (
+							<SearchItem
+								title={location.name}
+								latitude={location.latitude}
+								longitude={location.longitude}
+							/>
+						)
+					})}
 			</div>
 		</div>
 	)
