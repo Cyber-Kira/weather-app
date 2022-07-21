@@ -21,13 +21,13 @@ export const CardHighlight = ({
 }: Props) => {
 	let weatherWidget
 
-	if (widget === 'wind') {
+	if (deg && widget === 'wind') {
 		weatherWidget = <WindWidget deg={deg} />
-	} else if (widget === 'humidity') {
+	} else if (percentage && widget === 'humidity') {
 		weatherWidget = <HumidityWidget percentage={percentage} />
 	}
 
-	if (units === 'km') {
+	if (units && units === 'km') {
 		value = Number((value / 1000).toFixed(1))
 	}
 
