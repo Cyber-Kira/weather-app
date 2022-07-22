@@ -1,5 +1,8 @@
-export const fahrenheitToCelsius = (fahrenheit: number) =>
+export const toCelsius = (fahrenheit: number) =>
 	(fahrenheit - 273.15).toFixed(0)
+
+export const toFahrenheit = (celsius: number) =>
+	((celsius - 273.15) * (9 / 5) + 32).toFixed(0)
 
 export const getLocation = () => {
 	return new Promise<GeolocationPosition>(res => {

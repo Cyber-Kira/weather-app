@@ -18,7 +18,7 @@ interface InitialStateInterface {
 		longitude: number
 	}
 	day: string
-	unit: string
+	unit: 'celcius' | 'fahrenheit'
 	isMenuOpen: boolean
 	locations: LocationsInterface
 }
@@ -30,7 +30,7 @@ const initialState: InitialStateInterface = {
 		longitude: 36,
 	},
 	day: 'Fri, 5 Jun',
-	unit: 'kelvin',
+	unit: 'celcius',
 	isMenuOpen: false,
 	locations: { data: [] },
 }
@@ -38,7 +38,18 @@ const initialState: InitialStateInterface = {
 export const fetchLocation = createAsyncThunk(
 	'application/fetchLocations',
 	async (locationString: string) => {
+		// I use timeout before returning value because FREE plan on geoDB forbids certain amount of requests/second
+		const artifitialTimeout = () => {
+			return new Promise(resolve => {
+				setTimeout(() => {
+					resolve('done!')
+				}, 700)
+			})
+		}
+
 		const data = await fetchLocations(locationString)
+		await artifitialTimeout()
+
 		return data
 	}
 )
@@ -57,6 +68,9 @@ export const applicationSlice = createSlice({
 			state.isMenuOpen = payload
 			state.locations = { data: [] }
 		},
+		setUnit(state, { payload }: { payload: 'celcius' | 'fahrenheit' }) {
+			state.unit = payload
+		},
 	},
 	extraReducers: builder =>
 		builder
@@ -72,4 +86,5 @@ export const applicationSlice = createSlice({
 			}),
 })
 
-export const { setLocation, setDate, setMenu } = applicationSlice.actions
+export const { setLocation, setDate, setMenu, setUnit } =
+	applicationSlice.actions

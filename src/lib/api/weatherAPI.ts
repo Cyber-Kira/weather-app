@@ -4,8 +4,25 @@ const axios = require('axios').default
 
 const url = 'https://api.openweathermap.org/data/2.5'
 
+export type WeatherType =
+	| 'Clear'
+	| 'Hail'
+	| 'Haze'
+	| 'Rain'
+	| 'Clouds'
+	| 'Drizzle'
+	| 'Shower'
+	| 'Sleet'
+	| 'Snow'
+	| 'Thunderstorm'
+
 export interface WeatherDay {
 	dt: number
+	weather: [
+		{
+			main: WeatherType
+		}
+	]
 	temp: {
 		min: number
 		max: number
@@ -23,7 +40,7 @@ export interface FullWeatherReport {
 		wind_deg: number
 		weather: [
 			{
-				main: string
+				main: WeatherType
 			}
 		]
 	}

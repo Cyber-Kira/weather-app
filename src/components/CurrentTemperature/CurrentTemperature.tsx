@@ -1,18 +1,24 @@
 import React from 'react'
 import { useAppSelector } from '../../app/hooks'
-import { fahrenheitToCelsius } from '../../lib/utils'
+import { CurrentTemperatureSkeleton } from '../../lib/skeletons/CurrentTemperatureSkeleton'
+import { toCelsius, toFahrenheit } from '../../lib/utils'
 
 export const CurrentTemperature = () => {
-	const { data } = useAppSelector(store => store.weather)
+	const { data, isLoading } = useAppSelector(store => store.weather)
+	const { unit } = useAppSelector(store => store.application)
 
-	return (
+	const CurrentTemperatureElement = (
 		<div className='flex justify-center md:mt-16'>
 			<span className='font-raleway text-[144px] leading-[170px] font-medium text-lightestGray'>
-				{fahrenheitToCelsius(data.current.temp)}
+				{unit === 'celcius'
+					? toCelsius(data.current.temp)
+					: toFahrenheit(data.current.temp)}
 				<span className='font-raleway font-medium text-[48px] text-lightGray'>
 					&deg;C
 				</span>
 			</span>
 		</div>
 	)
+
+	return !isLoading ? CurrentTemperatureElement : <CurrentTemperatureSkeleton />
 }

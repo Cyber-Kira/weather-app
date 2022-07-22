@@ -1,12 +1,22 @@
 import React from 'react'
 import { useAppSelector } from '../../app/hooks'
+import { CardHighlightSkeleton } from '../../lib/skeletons/CardHightlightSkeleton'
 import { CardHighlight } from '../CardHighlight'
 
 export const HighlightList = () => {
-	const { data } = useAppSelector(store => store.weather)
+	const { data, isLoading } = useAppSelector(store => store.weather)
 
-	return (
-		<div className='flex flex-wrap md:grid grid-cols-2 gap-8 md:gap-12 mb-8'>
+	const HighlightListSkeleton = (
+		<>
+			<CardHighlightSkeleton />
+			<CardHighlightSkeleton />
+			<CardHighlightSkeleton />
+			<CardHighlightSkeleton />
+		</>
+	)
+
+	const HighlightListElement = (
+		<>
 			<CardHighlight
 				title='Wind status'
 				value={Number(data.current.wind_speed.toFixed(0))}
@@ -31,6 +41,12 @@ export const HighlightList = () => {
 				value={data.current.pressure}
 				units='mb'
 			/>
+		</>
+	)
+
+	return (
+		<div className='flex flex-wrap md:grid grid-cols-2 gap-8 md:gap-12 mb-8'>
+			{!isLoading ? HighlightListElement : HighlightListSkeleton}
 		</div>
 	)
 }

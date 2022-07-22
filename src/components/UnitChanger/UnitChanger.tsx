@@ -1,6 +1,15 @@
 import React from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setUnit } from '../../features/application/applicationSlice'
 
 export const UnitChanger = () => {
+	const { unit } = useAppSelector(store => store.application)
+	const dispatch = useAppDispatch()
+
+	const handleClick = (value: 'celcius' | 'fahrenheit') => {
+		dispatch(setUnit(value))
+	}
+
 	return (
 		<fieldset className='hidden md:flex mt-[2.625rem]'>
 			<div className='flex gap-3 ml-auto'>
@@ -14,10 +23,10 @@ export const UnitChanger = () => {
 							type='radio'
 							name='units'
 							id='celsius'
-							checked
-							onChange={e => console.log(e)}
+							checked={unit === 'celcius'}
+							onChange={() => handleClick('celcius')}
 						/>
-						<div className='bg-buttonText peer-checked:bg-lightestGray absolute inset-0 rounded-full transition-colors' />
+						<div className='bg-buttonText peer-checked:bg-lightestGray peer absolute inset-0 rounded-full transition-colors' />
 						<span className='font-raleway font-bold text-lg leading-[21px] text-lightestGray peer-checked:text-darkBlue isolate'>
 							&deg;C
 						</span>
@@ -33,6 +42,8 @@ export const UnitChanger = () => {
 							type='radio'
 							name='units'
 							id='fahrenheit'
+							checked={unit === 'fahrenheit'}
+							onChange={() => handleClick('fahrenheit')}
 						/>
 						<div className='bg-buttonText peer-checked:bg-lightestGray absolute inset-0 rounded-full transition-colors' />
 						<span className='font-raleway font-bold text-lg leading-[21px] text-lightestGray peer-checked:text-darkBlue isolate'>

@@ -12,7 +12,7 @@ export const Header = () => {
 	}
 
 	const handleLocationClick = () => {
-		dispatch(getWeather({}))
+		dispatch(getWeather())
 	}
 
 	return (

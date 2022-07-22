@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { getLocation } from '../../lib/utils/index'
 import {
 	fetchCurrentLocationWeather,
 	FullWeatherReport,
 } from '../../lib/api/weatherAPI'
+import { fetchByCoords } from '../../lib/api/geoAPI'
+import { getLocation } from '../../lib/utils'
 
 interface InitialStateInterface {
 	data: FullWeatherReport
+	currentCity?: string
 	isLoading: boolean
 }
 
@@ -30,6 +32,11 @@ const initialState: InitialStateInterface = {
 		daily: [
 			{
 				dt: 1658307600,
+				weather: [
+					{
+						main: 'Shower',
+					},
+				],
 				temp: {
 					min: 18,
 					max: 18,
@@ -40,29 +47,40 @@ const initialState: InitialStateInterface = {
 }
 
 interface Props {
-	locationLatitude?: number
-	locationLongitude?: number
+	latitude: number
+	longitude: number
 }
 
-export const getWeather = createAsyncThunk(
-	'weather/getFullWeatherReport',
-	async ({ locationLatitude, locationLongitude }: Props) => {
-		let latitude = locationLatitude
-		let longitude = locationLongitude
-
-		if (!locationLatitude && !locationLongitude) {
-			const crd = await getLocation().then(value => {
-				return value
-			})
-			latitude = crd.coords.latitude
-			longitude = crd.coords.longitude
-		}
-
+export const getWeatherByCoords = createAsyncThunk(
+	'weather/getFullWeatherReportByCoords',
+	async ({ latitude, longitude }: Props) => {
 		const response = await fetchCurrentLocationWeather({
 			latitude,
 			longitude,
 		})
-		return response
+		const currentLocation = await fetchByCoords(latitude, longitude)
+		const currentCity = currentLocation.data[0].city
+
+		return { response, currentCity }
+	}
+)
+
+export const getWeather = createAsyncThunk(
+	'weather/getFullWeatherReport',
+	async () => {
+		const geoLocation = await getLocation().then(data => {
+			return data
+		})
+		const geoLatitude = geoLocation.coords.latitude
+		const geoLongitude = geoLocation.coords.longitude
+		const response = await fetchCurrentLocationWeather({
+			latitude: geoLatitude,
+			longitude: geoLongitude,
+		})
+		const currentLocation = await fetchByCoords(geoLatitude, geoLongitude)
+		const currentCity = currentLocation.data[0].city
+
+		return { response, currentCity }
 	}
 )
 
@@ -76,10 +94,22 @@ export const weatherSlice = createSlice({
 				state.isLoading = true
 			})
 			.addCase(getWeather.fulfilled, (state, { payload }) => {
-				state.data = payload
+				state.data = payload.response
+				state.currentCity = payload.currentCity
 				state.isLoading = false
 			})
 			.addCase(getWeather.rejected, state => {
+				state.isLoading = false
+			})
+			.addCase(getWeatherByCoords.pending, state => {
+				state.isLoading = true
+			})
+			.addCase(getWeatherByCoords.fulfilled, (state, { payload }) => {
+				state.data = payload.response
+				state.currentCity = payload.currentCity
+				state.isLoading = false
+			})
+			.addCase(getWeatherByCoords.rejected, state => {
 				state.isLoading = false
 			})
 	},

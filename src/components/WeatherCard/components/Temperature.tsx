@@ -1,5 +1,6 @@
 import React from 'react'
-import { fahrenheitToCelsius } from '../../../lib/utils'
+import { useAppSelector } from '../../../app/hooks'
+import { toCelsius, toFahrenheit } from '../../../lib/utils'
 
 interface Props {
 	min: number
@@ -7,18 +8,20 @@ interface Props {
 }
 
 export const Temperature = ({ min, max }: Props) => {
+	const { unit } = useAppSelector(store => store.application)
+
 	return (
 		<div className='flex items-center justify-between gap-4'>
 			<span className='font-raleway font-medium text-base leading-[19px] text-lightestGray'>
-				{fahrenheitToCelsius(max)}
+				{unit === 'celcius' ? toCelsius(min) : toFahrenheit(min)}
 				<span className='font-raleway font-medium text-base leading-[19px] text-lightestGray'>
-					&deg;C
+					&deg;{unit === 'celcius' ? 'C' : 'F'}
 				</span>
 			</span>
 			<span className='font-raleway font-medium text-base leading-[19px] text-lightGray'>
-				{fahrenheitToCelsius(min)}
+				{unit === 'celcius' ? toCelsius(max) : toFahrenheit(max)}
 				<span className='font-raleway font-medium text-base leading-[19px] text-lightGray'>
-					&deg;C
+					&deg;{unit === 'celcius' ? 'C' : 'F'}
 				</span>
 			</span>
 		</div>
