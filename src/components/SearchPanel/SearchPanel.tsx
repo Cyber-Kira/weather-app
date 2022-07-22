@@ -14,6 +14,7 @@ export const SearchPanel = () => {
 	const { isMenuOpen, locations, isLoading } = useAppSelector(
 		store => store.application
 	)
+	let SearchPanelElements = null
 
 	const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.target.value)
@@ -33,29 +34,26 @@ export const SearchPanel = () => {
 		setValue('')
 	}
 
-	let SearchPanelElements = null
-
-	SearchPanelElements = locations.data.map(location => {
-		return (
-			<SearchItem
-				key={location.id}
-				title={location.name}
-				latitude={location.latitude}
-				longitude={location.longitude}
-				setValue={setValue}
-			/>
-		)
-	})
-
-	if (SearchPanelElements.length === 0) {
-		SearchPanelElements = (
+	SearchPanelElements =
+		locations.data !== null ? (
+			locations.data.map(location => {
+				return (
+					<SearchItem
+						key={location.id}
+						title={location.name}
+						latitude={location.latitude}
+						longitude={location.longitude}
+						setValue={setValue}
+					/>
+				)
+			})
+		) : (
 			<div className='w-full text-center font-raleway flex flex-col gap-5 text-2xl text-lightestGray'>
 				<span className='material-icons text-[9.375rem]'>warning</span>
 				<p>No results found.</p>
 				<p>Try adjusting your search to find your city.</p>
 			</div>
 		)
-	}
 
 	return (
 		<div

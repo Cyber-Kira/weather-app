@@ -50,6 +50,10 @@ export const fetchLocation = createAsyncThunk(
 		const data = await fetchLocations(locationString)
 		await artifitialTimeout()
 
+		if (data.data.length === 0) {
+			return { data: null }
+		}
+
 		return data
 	}
 )
